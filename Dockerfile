@@ -5,8 +5,8 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the application
-FROM openjdk:17-jdk-slim
+# Stage 2: Run the application (Humne ye line change ki hai)
+FROM eclipse-temurin:17-jdk-focal
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080

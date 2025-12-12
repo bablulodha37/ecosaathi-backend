@@ -86,7 +86,7 @@ public class RequestService {
         }
         return new double[]{0.0, 0.0};
     }
-
+    
     private List<String> saveMultipleFiles(List<MultipartFile> files) {
         List<String> fileUrls = new ArrayList<>();
 
@@ -100,10 +100,19 @@ public class RequestService {
                     fileExtension = originalFileName.substring(dotIndex);
                 }
                 String fileName = UUID.randomUUID().toString() + fileExtension;
+                
+                // FIX: Path ko sahi kiya
                 Path targetLocation = Paths.get(fileStorageProperties.getUploadDir()).resolve(fileName);
+                
+                // Directory exist karti hai ya nahi check karein
+                Files.createDirectories(targetLocation.getParent());
 
                 Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-                fileUrls.add("http://localhost:8080/images/" + fileName);
+                
+                // FIX: Localhost hata diya. Sirf filename return karein.
+                // Frontend par hum BASE_URL + "/images/" + filename jod lenge.
+                fileUrls.add("/images/" + fileName); 
+                
             } catch (Exception ex) {
                 System.err.println("Multiple File Storage Error: " + ex.getMessage());
                 throw new RuntimeException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
@@ -111,7 +120,6 @@ public class RequestService {
         }
         return fileUrls;
     }
-
     // ---------------------------------------------------------------
     // STATS
     // ---------------------------------------------------------------

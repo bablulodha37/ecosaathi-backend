@@ -29,7 +29,7 @@ public class EmailService {
     /**
      * Send HTML email asynchronously
      */
-    @Async
+   // @Async
     public void sendHtmlEmail(String to, String subject, String htmlContent) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
